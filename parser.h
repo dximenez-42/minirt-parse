@@ -6,7 +6,7 @@
 /*   By: dximenez <dximenez@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 19:34:51 by dximenez          #+#    #+#             */
-/*   Updated: 2024/06/05 23:56:09 by dximenez         ###   ########.fr       */
+/*   Updated: 2024/06/06 00:18:12 by dximenez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,6 @@
 void	parse(int fd);
 
 // TODO temp, remove & implement
-int	ft_haschar(char *str, char c);
+int		ft_haschar(char *str, char c);
 
 #endif
