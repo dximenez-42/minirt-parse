@@ -6,7 +6,7 @@
 /*   By: dximenez <dximenez@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 19:34:51 by dximenez          #+#    #+#             */
-/*   Updated: 2024/06/06 00:18:12 by dximenez         ###   ########.fr       */
+/*   Updated: 2024/06/06 15:48:48 by dximenez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,19 @@
 # include "libft/include/libft.h"
 
 # include "objects.h"
-# include "types.h"
 
 void	parse(int fd);
+
+typedef enum e_types
+{
+	ERR=-1,
+	AMB,
+	CAM,
+	LIG,
+	SPH,
+	PLA,
+	CYL
+}	t_types;
 
 // TODO temp, remove & implement
 int		ft_haschar(char *str, char c);

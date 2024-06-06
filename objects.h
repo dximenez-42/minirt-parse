@@ -6,7 +6,7 @@
 /*   By: dximenez <dximenez@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 22:35:11 by dximenez          #+#    #+#             */
-/*   Updated: 2024/06/06 00:18:33 by dximenez         ###   ########.fr       */
+/*   Updated: 2024/06/06 15:41:09 by dximenez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,115 +15,93 @@
 
 # include "parser.h"
 
-typedef enum e_object_type
-{
-	AMB,
-	CAM,
-	LIG,
-	SPH,
-	PLA,
-	CYL
-}			t_object_type;
 
-typedef struct s_object
+typedef struct s_vec
 {
-	t_object_type	type;
-	void			*data;
-	struct s_object	*next;
-}				t_object;
+	double	x;
+	double	y;
+	double	z;
+}	t_vec;
 
-/**
- * Ambient light
- * @param ra Ratio - [0.0,1.0]
- * @param o RGB - [0,255]
- * @param fov FOV - [0,180]
-*/
-typedef struct s_amb
+typedef struct s_ray
 {
-	double			ra;
-	struct s_rgb	rgb;
-}	t_amb;
+	t_vec	o;
+	t_vec	v;
+}	t_ray;
 
-/**
- * Camera
- * @param c Coordinates
- * @param o Orientation - [-1.0,1.0]
- * @param fov FOV - [0,180]
-*/
-typedef struct s_cam
+typedef struct s_data
 {
-	struct s_vec3	c;
-	struct s_vec3	o;
-	double			fov;
-}	t_cam;
+	void	*img;
+	char	*addr;
+	int		bits_per_pixel;
+	int		line_length;
+	int		endian;
+}	t_data;
 
-/**
- * Light
- * @param c Coordinates
- * @param b Brightness - [0,1.0]
- * @param rgb RGB - [0,255]
-*/
-typedef struct s_lig
+typedef struct s_camera
 {
-	struct s_vec3	c;
-	struct s_vec3	b;
-	struct s_rgb	rgb;
-}	t_lig;
+	t_vec	o;
+	t_vec	v;
+	t_ray	*r;
+	int		fov;
+}	t_camera;
 
-/**
- * Sphere
- * @param c Coordinates
- * @param d Diameter
- * @param rgb RGB - [0,255]
-*/
-typedef struct s_sph
+typedef struct s_sphere
 {
-	struct s_vec3	c;
-	double			d;
-	struct s_rgb	rgb;
-}	t_sph;
+	t_vec	o;
+	int		radius;
+	int		*color;
+}	t_sphere;
 
-/**
- * Plane
- * @param c Coordinates
- * @param n Normal vector - [-1.0,1.0]
- * @param rgb RGB - [0,255]
-*/
-typedef struct s_pla
+typedef struct s_plane
 {
-	struct s_vec3	c;
-	struct s_vec3	n;
-	struct s_rgb	rgb;
-}	t_pla;
+	t_vec	o;
+	t_vec	v;
+	int		*color;
+}	t_plane;
 
-/**
- * Cylinder
- * @param c Coordinates
- * @param n Normal vector - [-1.0,1.0]
- * @param d Diameter
- * @param h Height
- * @param rgb RGB - [0,255]
-*/
-typedef struct s_cyl
+typedef struct s_cylinder
 {
-	struct s_vec3	c;
-	struct s_vec3	n;
-	double			d;
-	double			h;
-	struct s_rgb	rgb;
-}	t_cyl;
+	t_vec		o;
+	t_vec		v;
+	double		radius;
+	double		r2;
+	double		height;
+	int			*color;
+	int			is_cover;
+	t_plane		*covers[2];
+}	t_cylinder;
+
+typedef struct s_light
+{
+	t_vec	o;
+	int		x_origin;
+	int		y_origin;
+	int		z_origin;
+	double	intensity;
+	int		*color;
+}	t_light;
+
+typedef struct s_alight
+{
+	double	intensity;
+	int		*color;
+}	t_alight;
+
+typedef struct s_objects
+{
+	t_cylinder	**cylinders;
+	t_sphere	**spheres;
+	t_plane		**planes;
+}	t_objects;
 
 typedef struct s_scene
 {
-	struct s_object	**objs;
-	struct s_amb	*amb;
-	struct s_cam	*cam;
-	struct s_lig	*lig;
-}				t_scene;
+	t_camera	*camera;
+	t_objects	*objects;
+	t_light		*lights;
+	t_alight	*alight;
+}	t_scene;
 
-t_object	*obj_last(t_object *lst);
-void		obj_add(t_object **lst, t_object *n);
-int			obj_size(t_object *lst);
-t_object	*obj_new(void *content);
 
 #endif
